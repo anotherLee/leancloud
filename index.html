@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed" rel="stylesheet">
+    <script src="jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button id="logout" hidden>退出</button>
+    <div id="main">
+        <section id="header">
+            <img src="https://ooo.0o0.ooo/2017/05/24/5925238349214.png" alt="">
+            <img src="https://ooo.0o0.ooo/2017/05/24/5925279644552.png" alt="">
+        </section>
+
+        <section id="body">
+            <div id="sign">
+                <div>sign in</div>
+                <div>sign up</div>
+            </div>
+            <hr>
+            <div class="line"></div>
+            <div class="line"></div>
+
+            <form action="#" id="signIn">
+                <div>
+                    <i class="fa fa-envelope" aria-hidden="true"></i><input type="text" name="username" placeholder="username">
+                </div>
+                <div class="long"></div>
+                <div>
+                    <i id='icon2' class="fa fa-unlock-alt" aria-hidden="true"></i><input id='input2' type="password" name="password"placeholder="password">
+                </div>
+                <div class="long"></div>
+
+                <div class="rememberMe">
+                    <div id="remember">Remember me</div>
+                    <label for="button" class="switch">
+                        <input type="checkbox" id="button">
+                        <div class="slide"></div>
+                    </label>
+                </div>
+
+                <input type="submit" value="sign in">
+
+            </form>
+
+
+            <!--这是sign up的具体内容-->
+
+            <form action="#" class="signUp">
+                <div>
+                    <i class="fa fa-envelope" aria-hidden="true"></i><input type="email" name="email" placeholder="email">
+                </div>
+                <div class="long"></div>
+                <div>
+                    <i id='icon2' class="fa fa-unlock-alt" aria-hidden="true"></i><input id='input2' type="text" name="username"placeholder="username">
+                </div>
+                <div class="long"></div>
+                <div>
+                    <i id='icon2' class="fa fa-unlock-alt" aria-hidden="true"></i><input id='input2' type="password" name="password"placeholder="password">
+                </div>
+                <div class="long"></div>
+
+                <input type="submit" value="sign up">
+
+            </form>
+
+
+
+        </section>
+
+        <section id="footer">
+            <p>forgot your password?</p>
+        </section>
+
+    </div>
+
+    <script>
+        $('#sign').children().first().on('click',function(){
+            $('.line').first().css('display','block').next().css('display','none')
+            $('form').first().css('display','block').end().last().css('display','none')
+
+        })
+        $('#sign').children().last().on('click',function(){
+            $('.line').last().css('display','block').prev().css('display','none')
+            $('form').last().css('display','block').end().first().css('display','none')
+        })
+    </script>
+
+    <script src="./node_modules/leancloud-storage/dist/av.js"></script>
+    <script>
+        var APP_ID = 'FVG9YAGP4LlN3u3J53xuj2FR-gzGzoHsz';
+        var APP_KEY = 'SRFOkXfCUUlmyBkzByOGWf5K';
+        AV.init({
+            appId: APP_ID,
+            appKey: APP_KEY
+        });
+
+        let user = AV.User.current()
+        if(user){
+            alert('你好， ' + user.attributes.username)
+            logout.removeAttribute('hidden')
+        }
+
+        logout.addEventListener('click',function(){
+            AV.User.logOut();
+            // 现在的 currentUser 是 null 了
+            window.location.reload()
+
+        })
+
+
+
+
+        let $signUpForm = $('.signUp')
+
+        $signUpForm.on('submit',function(e){
+            e.preventDefault()
+            var user = new AV.User();
+            // 设置用户名
+            user.setUsername($signUpForm[0].username.value);
+            // 设置密码
+            user.setPassword($signUpForm[0].password.value);
+            // 设置邮箱
+            user.setEmail($signUpForm[0].email.value);
+            user.signUp().then(function (loginedUser) {
+                console.log(loginedUser);
+                window.location.reload()
+            }, function (error) {
+                console.log(error)
+            });
+
+        })
+
+
+        let signInForm = document.querySelector('#signIn')
+
+        signInForm.addEventListener('submit',function(e){
+            e.preventDefault()
+            let username = signInForm.username.value
+            let password = signInForm.password.value
+            AV.User.logIn(username, password).then(function (loginedUser) {
+                console.log(loginedUser);
+                window.location.reload()
+
+            }, function (error) {
+                console.log(error)
+            });
+        })
+
+
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>
