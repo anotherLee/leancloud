@@ -13,6 +13,14 @@
     <title>Document</title>
 </head>
 <body>
+    <div class="wrapper">
+        <div id="welcome">
+            <div id="welcomeContent"></div>
+            <button id="out">确定</button>
+        </div>
+    </div>
+
+
     <button id="logout" hidden>退出</button>
     <div id="main">
         <section id="header">
@@ -29,7 +37,7 @@
             <div class="line"></div>
             <div class="line"></div>
 
-            <form action="#" id="signIn">
+            <form action="#" id="signIn" method="post">
                 <div>
                     <i class="fa fa-envelope" aria-hidden="true"></i><input type="text" name="username" placeholder="username">
                 </div>
@@ -54,7 +62,7 @@
 
             <!--这是sign up的具体内容-->
 
-            <form action="#" class="signUp">
+            <form action="#" class="signUp" method="post">
                 <div>
                     <i class="fa fa-envelope" aria-hidden="true"></i><input type="email" name="email" placeholder="email">
                 </div>
@@ -92,6 +100,8 @@
             $('.line').last().css('display','block').prev().css('display','none')
             $('form').last().css('display','block').end().first().css('display','none')
         })
+
+
     </script>
 
     <script src="av.js"></script>
@@ -105,7 +115,11 @@
 
         let user = AV.User.current()
         if(user){
-            alert('你好， ' + user.attributes.username)
+            welcomeContent.textContent = '你好， ' + user.attributes.username
+            $('#welcome').css('display','block')
+            $('#out').click(function(){
+                $('#welcome').css('display','none')
+            })
             logout.removeAttribute('hidden')
         }
 
